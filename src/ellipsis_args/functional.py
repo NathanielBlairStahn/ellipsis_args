@@ -1,3 +1,5 @@
+from loguru import logger
+
 SENTINEL = Ellipsis
 
 # Original no kwargs version from 2022-11-05.
@@ -9,9 +11,9 @@ def partially_applicable_no_kwargs(func, nullary_as_const=True):
 #   This works, but then we don't have the option to return a function rather than a constant:
 #         if len(omitted_indices) == 0:
 #             return func(*args) # Nullary function because arity equals number of omitted indices
-        print(f"{omitted_indices=}")
+        logger.debug(f"{omitted_indices=}")
         def partially_applied_func(*fewer_args):
-            print(f"{omitted_indices=}, {args=}, {fewer_args=}")
+            logger.debug(f"{omitted_indices=}, {args=}, {fewer_args=}")
             if len(fewer_args) != len(omitted_indices):
                 raise TypeError(
                     f"The partially applied function takes {len(omitted_indices)} "
@@ -20,7 +22,7 @@ def partially_applicable_no_kwargs(func, nullary_as_const=True):
             new_args = list(args)
             for i,j in enumerate(omitted_indices):
                 new_args[j] = fewer_args[i]
-            print(f"{new_args=}")
+            logger.debug(f"{new_args=}")
             return func(*new_args)
 
         if len(omitted_indices) == 0:
@@ -47,11 +49,11 @@ def partially_applicable(func, nullary_as_const=True):
         # This list maps the index of each new argument to its original position in args
         omitted_indices = [j for j, arg in enumerate(args) if arg is SENTINEL]
         omitted_kwds = [kwd for kwd, val in kwargs.items() if val is SENTINEL]
-        print(f"{omitted_indices=}, {omitted_kwds=}")
+        logger.debug(f"{omitted_indices=}, {omitted_kwds=}")
 
         def partially_applied_func(*fewer_args, **fewer_kwargs):
-            print(f"{omitted_indices=}, {args=}, {fewer_args=}")
-            print(f"{omitted_kwds=}, {kwargs=}, {fewer_kwargs=}")
+            logger.debug(f"{omitted_indices=}, {args=}, {fewer_args=}")
+            logger.debug(f"{omitted_kwds=}, {kwargs=}, {fewer_kwargs=}")
             if (n_given:=len(fewer_args)+len(fewer_kwargs)) != (n_required:=len(omitted_indices)+len(omitted_kwds)):
                 raise TypeError(
                     f"The partially applied function takes {n_required} "
@@ -63,7 +65,7 @@ def partially_applicable(func, nullary_as_const=True):
                 new_args[j] = fewer_args[i]
             for kwd in omitted_kwds:
                 new_kwargs[kwd] = fewer_kwargs[kwd]
-            print(f"{new_args=}, {new_kwargs=}")
+            logger.debug(f"{new_args=}, {new_kwargs=}")
             return func(*new_args, **new_kwargs)
 
         if len(omitted_indices) == 0 and len(omitted_kwds) == 0:
