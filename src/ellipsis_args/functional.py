@@ -86,7 +86,13 @@ def partially_applicable(func, nullary_as_const=True):
                 new_kwargs[kwd] = (
                     fewer_kwargs[kwd] if kwd in fewer_kwargs
                     # TODO: Double-check reasoning to make sure
-                    # this index is guaranteed to be in bounds
+                    # this index is guaranteed to be in bounds.
+                    # Actually, I think this could fail if the
+                    # user passes an incorrect keyword -- in that
+                    # case it would be better to pass the bad
+                    # keyword to func and let func raise an
+                    # exception rather than fail with an
+                    # index error as this would do.
                     else fewer_args[len(omitted_indices)+i]
                 )
             logger.debug(f"{new_args=}, {new_kwargs=}")
