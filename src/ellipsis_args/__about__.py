@@ -13,7 +13,7 @@ __title__ = "ellipsis_args"
 __summary__ = "A Python module for creating partially applied functions with flexible, intuitive syntax."
 __uri__ = "https://github.com/NathanielBlairStahn/ellipsis_args"
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 __author__ = "Nathaniel Blair-Stahn"
 __email__ = "ndbs@uw.edu"
